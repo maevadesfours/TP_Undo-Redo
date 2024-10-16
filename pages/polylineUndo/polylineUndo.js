@@ -119,8 +119,13 @@ const polylineMachine = createMachine(
                 polyline.points(newPoints);
                 polyline.stroke("black"); // On change la couleur
                 // On sauvegarde la polyline dans la couche de dessin
-                dessin.add(polyline); // On l'ajoute à la couche de dessin
+                //dessin.add(polyline); // On l'ajoute à la couche de dessin
+
+                commande = new Command()
+                commande.execute();
             },
+
+
             addPoint: (context, event) => {
                 const pos = stage.getPointerPosition();
                 const currentPoints = polyline.points(); // Get the current points of the line
@@ -152,6 +157,21 @@ const polylineMachine = createMachine(
         },
     }
 );
+
+class Command{
+    execute(){};
+}
+
+class ConcreteCommand extends Command {
+    constructor(line, layer) {
+        super();
+        this.line = line;
+        this.layer = layer;
+    }
+    execute() {
+        layer.add(line)
+    }
+}
 
 const polylineService = interpret(polylineMachine)
     .onTransition((state) => {
