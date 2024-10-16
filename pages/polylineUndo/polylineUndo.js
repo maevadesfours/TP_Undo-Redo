@@ -121,8 +121,11 @@ const polylineMachine = createMachine(
                 // On sauvegarde la polyline dans la couche de dessin
                 //dessin.add(polyline); // On l'ajoute à la couche de dessin
 
-                commande = new Command()
-                commande.execute();
+                commande = new ConcreteCommand(dessin, polyline);
+                //commande.execute();
+                undoManager = execute(commande);
+
+               
             },
 
 
@@ -163,13 +166,16 @@ class Command{
 }
 
 class ConcreteCommand extends Command {
-    constructor(line, layer) {
+    constructor(dessin, polyline) {
         super();
-        this.line = line;
-        this.layer = layer;
+        this.dessin = dessin;
+        this.polyline = polyline;
     }
-    execute() {
-        layer.add(line)
+    undo(){
+        this.polyline.remove();
+    }
+    execute(){
+        this.dessin.add(this.polyline);
     }
 }
 
